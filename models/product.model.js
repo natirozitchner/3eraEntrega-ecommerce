@@ -10,9 +10,18 @@ name: {
     minlength: 4,
     maxlength: 30
 },
-price: Number,
-description: String,
-category: String,
+price: {
+    type: Number,
+    required: true
+},
+description: {
+    type: String,
+    required: true
+},
+category: {
+    type: String,
+    required: true
+},
 image: String,
 createdAt: {type: Date, default: Date.now},
 active: {type: Boolean, default: true},

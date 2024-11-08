@@ -1,6 +1,5 @@
 const multer = require('multer')
 const path = require('path')
-const crypto = require('crypto')
 
 
 const storage = multer.diskStorage({
@@ -10,8 +9,6 @@ const storage = multer.diskStorage({
         const name = crypto.randomUUID()
 
         const filename = name + path.extname(file.originalname)
-
-
 
         cb(null, filename)
     }

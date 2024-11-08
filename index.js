@@ -4,12 +4,7 @@ const app = require('./app');
 const PORT = 3000
 const mongoose = require('mongoose')
 
-
 const DATABASE_URL = process.env.MONGO_URI;
-
-app.get("/users", (req, res)=> {
-    return res.send("Usuarios obtenidos")
-})
 
 mongoose.connect(DATABASE_URL).then(() => {
 
@@ -18,6 +13,6 @@ mongoose.connect(DATABASE_URL).then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`)
     })
-}).catch(error => console.log(error))
+}).catch(error => console.log("Error al conectar a la DB", error))
 
 

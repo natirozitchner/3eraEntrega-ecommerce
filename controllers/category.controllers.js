@@ -10,8 +10,6 @@ async function getCategories(req, res) {
             categories
         })
 
-
-
     } catch (error) {
         console.log(error)
         return res.status(500).send({

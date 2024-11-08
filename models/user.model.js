@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-//Vamos a definir el esquema de nuestro modelo
 
 const userSchema = new Schema({
 name: {
@@ -14,7 +13,7 @@ mail: {
     type: String,
     required: true,
     trim: true,
-    minlength: 5,
+    minlength: 7,
     maxlength:90,
     unique: true,
     index: true,
@@ -32,6 +31,7 @@ birthday: {
 },
 image: {
     type: String,
+    required: true
 },
 password: {
     type: String, 

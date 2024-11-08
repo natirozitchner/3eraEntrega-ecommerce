@@ -11,7 +11,6 @@ app.use( cors() )
 
 app.use(express.static('public'))
 
-//Habilitamos el metodo JSON para poder leer los datos del body en una request:
 app.use(express.json())
 
 app.use([userRoutes, productRoutes, categoryRoutes, orderRoutes])

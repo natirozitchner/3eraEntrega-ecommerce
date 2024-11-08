@@ -3,8 +3,6 @@ const SECRET = process.env.SECRET
 
 function validation(req,res,next) {
 
-    //const token = req.headers.authorization.split(" ")[1] 
-
 const token = req.headers.authorization;
 
 if (!token) {
@@ -21,8 +19,6 @@ jwt.verify(token, SECRET, (error, payload) => {
             message: "No tiene autorización para acceder aqui"
         })
     }
-
-    //En el payload se encuentra la info del usuario sin modificar
     console.log(payload)
 
     req.user = payload

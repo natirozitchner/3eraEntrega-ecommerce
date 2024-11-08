@@ -4,9 +4,7 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET
 
-//FUNCIONES PARA MANEJAR DISTINTAS PETICIONES:
 
-//Función obtener usuarios
 async function getUsers(req, res) {
     try {
         const users = await User.find();
@@ -20,10 +18,9 @@ async function getUsers(req, res) {
     }
 }
 
-//Función crear usuario:
+
 async function createUser(req, res) {
 
-    //Encriptar la contraseña:
 
     if (!req.body.password) {
         return res.status(400).send({
@@ -57,12 +54,12 @@ async function createUser(req, res) {
 
 }
 
-//Función para obtener un usuario específico:
+
 async function getUserById(req, res) {
     try {
 
         const { id } = req.params;
-
+        
         if (req.user.role !==  "admin" && id !== req.user._id) {
             return res.status(403).send({
                 message: "No tienes permisos para acceder a este usuario"
@@ -86,11 +83,11 @@ async function getUserById(req, res) {
 
     } catch (error) {
         console.log(error)
-        return res.status(500).send("Error al obtener usuario")
+        return res.status(500).send("Error al obtener usuario de la DB")
     }
 }
 
-//Función borrar usuario:
+
 async function deleteUser(req, res) {
     try {
 
@@ -108,13 +105,13 @@ async function deleteUser(req, res) {
         console.log(error)
         return res.status(500).send({
             ok: false,
-            message: "Error al borrar el producto"
+            message: "Error al borrar el usuario"
         })
 
     }
 }
 
-//Actualizar usuario:
+
 async function updateUser(req, res) {
     try {
         const { id } = req.params
@@ -142,10 +139,10 @@ async function updateUser(req, res) {
     }
 }
 
-//Login:
+
 async function login(req, res) {
     try {
-        //Obtener mail y password del body
+        
         const { mail, password } = req.body
         console.log(mail, password)
 
@@ -163,26 +160,20 @@ async function login(req, res) {
             })
         }
 
-        //Comparamos la contraseña del body con la del usuario en la DB
         const match = await bcrypt.compare(password, user.password)
         
-        //Si no coinciden devolvemos un mensaje de error
         if (!match) {
             return res.status(400).send({
                 message: "Alguno de los datos es incorrecto"
             })
         }
 
-
-        // Eliminar la propiedad password
         user.password = undefined
         user.__v = undefined
 
         const token = jwt.sign(user.toJSON(), SECRET, {expiresIn: '1h'})
 
         console.log(token)
-
-
 
         return res.send({
             message: "Login exitoso",
