@@ -11,7 +11,7 @@ async function getOrder(req, res) {
         })
     } catch (error) {
         console.log(error)
-        res.status(500).json({message:'Internal server error'})
+        res.status(500).json({message:'No se pudieron obtener las ordenes'})
     }
 }
 
@@ -23,7 +23,7 @@ async function createOrder(req, res) {
         const newOrder = await order.save();
 
         return res.status(201).send({
-            message: 'Order created',
+            message: 'Orden creada',
             newOrder
         })
         

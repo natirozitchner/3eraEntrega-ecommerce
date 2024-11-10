@@ -21,37 +21,33 @@ async function getUsers(req, res) {
 
 async function createUser(req, res) {
 
-
-    if (!req.body.password) {
-        return res.status(400).send({
-            ok: false,
-            message: "La contraseña es requerida"
-        })
-    }
-
     const user = new User(req.body)
 
-    bcrypt.hash(user.password, saltRounds, (error, hash) => {
+    if (req.file) {
+        user.image = req.file.filename
+    }
 
-        if (error) {
+    bcrypt.hash(user.password, saltRounds, (error, hash)=>{
+
+        if(error){
+            console.log(error)
             return res.status(500).send({
                 ok: false,
                 message: "Error al crear usuario"
             })
         }
-
         user.password = hash;
 
         user.save().then((nuevoUser) => {
             console.log(nuevoUser);
             res.status(201).send(nuevoUser)
-
+    
         }).catch(error => {
             console.log(error)
             res.send("El usuario no se pudo crear")
         })
-    })
 
+    })
 }
 
 
@@ -59,8 +55,8 @@ async function getUserById(req, res) {
     try {
 
         const { id } = req.params;
-        
-        if (req.user.role !==  "admin" && id !== req.user._id) {
+
+        if (req.user.role !== "admin" && id !== req.user._id) {
             return res.status(403).send({
                 message: "No tienes permisos para acceder a este usuario"
             })
@@ -116,13 +112,11 @@ async function updateUser(req, res) {
     try {
         const { id } = req.params
 
-        if (req.user.role !== "admin" && id !== req.user._id) {
-            return res.status(403).send({
-                message: "No tienes permisos para actualizar este usuario"
-            })
-        }
-
         const user = await User.findByIdAndUpdate(id, req.body, { new: true })
+
+        if (req.file) {
+            user.image = req.file.filename
+        }
 
         return res.status(200).send({
             ok: true,
@@ -142,7 +136,7 @@ async function updateUser(req, res) {
 
 async function login(req, res) {
     try {
-        
+
         const { mail, password } = req.body
         console.log(mail, password)
 
@@ -161,7 +155,7 @@ async function login(req, res) {
         }
 
         const match = await bcrypt.compare(password, user.password)
-        
+
         if (!match) {
             return res.status(400).send({
                 message: "Alguno de los datos es incorrecto"
@@ -171,7 +165,7 @@ async function login(req, res) {
         user.password = undefined
         user.__v = undefined
 
-        const token = jwt.sign(user.toJSON(), SECRET, {expiresIn: '1h'})
+        const token = jwt.sign(user.toJSON(), SECRET, { expiresIn: '2h' })
 
         console.log(token)
 
@@ -193,3 +187,4 @@ module.exports = {
     getUsers, createUser, getUserById, deleteUser, updateUser,
     login
 }
+

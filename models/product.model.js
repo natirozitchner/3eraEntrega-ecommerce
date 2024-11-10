@@ -16,13 +16,18 @@ price: {
 },
 description: {
     type: String,
-    required: true
+    required: true,
+    minlength:6,
+    maxlength: 120
 },
 category: {
     type: String,
     required: true
 },
-image: String,
+image: {
+type: String,
+required: true
+} ,
 createdAt: {type: Date, default: Date.now},
 active: {type: Boolean, default: true},
 updatedAt: {type: Date, default: Date.now}

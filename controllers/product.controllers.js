@@ -90,7 +90,7 @@ async function deleteProduct(req, res) {
 
 async function updateProduct(req, res) {
     try {
-        const { id } = req.params
+        const { _id } = req.params
 
         const product = req.body;
 
@@ -98,12 +98,12 @@ async function updateProduct(req, res) {
             product.image = req.file.filename
         }
 
-        const updateProd = await Product.findByIdAndUpdate(id, req.body, { new: true })
+        const updateProd = await Product.findByIdAndUpdate(_id, req.body, { new: true })
 
         return res.status(200).send({
             ok: true,
             message: "Producto actualizado correctamente",
-            products: updateProd
+            product: updateProd
         })
 
     } catch (error) {
