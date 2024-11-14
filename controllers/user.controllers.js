@@ -10,7 +10,10 @@ async function getUsers(req, res) {
         const users = await User.find();
         console.log(users)
 
-        return res.status(200).send(users);
+        return res.status(200).send({
+            message: "Usuarios obtenidos",
+            users
+        });
 
     } catch (error) {
         console.log(error)
@@ -40,7 +43,10 @@ async function createUser(req, res) {
 
         user.save().then((nuevoUser) => {
             console.log(nuevoUser);
-            res.status(201).send(nuevoUser)
+            res.status(201).send({
+                message: "Se creó un nuevo usuario",
+                nuevoUser
+            })
     
         }).catch(error => {
             console.log(error)
@@ -56,11 +62,11 @@ async function getUserById(req, res) {
 
         const { id } = req.params;
 
-        if (req.user.role !== "admin" && id !== req.user._id) {
-            return res.status(403).send({
-                message: "No tienes permisos para acceder a este usuario"
-            })
-        }
+        // if (req.user.role !== "admin" && id !== req.user._id) {
+        //     return res.status(403).send({
+        //         message: "No tienes permisos para acceder a este usuario"
+        //     })
+        // }
 
         const user = await User.findById(id)
 
@@ -112,16 +118,18 @@ async function updateUser(req, res) {
     try {
         const { id } = req.params
 
-        const user = await User.findByIdAndUpdate(id, req.body, { new: true })
+        const user = req.body;
 
         if (req.file) {
             user.image = req.file.filename
         }
 
+        const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true })
+
         return res.status(200).send({
             ok: true,
             message: "Usuario actualizado correctamente",
-            user
+            user: updatedUser
         })
 
     } catch (error) {

@@ -13,7 +13,7 @@ mail: {
     type: String,
     required: true,
     trim: true,
-    minlength: 7,
+    minlength: 5,
     maxlength:90,
     unique: true,
     index: true,
@@ -31,13 +31,12 @@ birthday: {
 },
 image: {
     type: String,
-    required: true
 },
 password: {
     type: String, 
     required: true,
     minlength:4,
-    maxlength:70,
+    maxlength:120,
     trim: true
 },
 province: {
